@@ -36,8 +36,13 @@ export class EventModalComponent {
     return this.event.jogadores.includes(this.stateService.userData.id);
   }
 
+  get isUserNarrator(): boolean {
+    if (!this.isLoggedIn || !this.stateService.userData?.id) return false;
+    return this.event.narrador === this.stateService.userData.id.toString();
+  }
+
   get canRegister(): boolean {
-    return this.isLoggedIn && !this.isUserRegistered && !this.isEventFull;
+    return this.isLoggedIn && !this.isUserRegistered && !this.isUserNarrator && !this.isEventFull;
   }
 
   get isEventFull(): boolean {
@@ -48,6 +53,7 @@ export class EventModalComponent {
     if (!this.isLoggedIn) return 'Para se cadastrar nesse evento, é necessário estar logado';
     if (this.isUserRegistered) return 'Você já está cadastrado neste evento';
     if (this.isEventFull) return 'Evento lotado';
+    if (this.isUserNarrator) return 'Você é o narrador deste evento';
     return 'Cadastrar-se no evento';
   }
 

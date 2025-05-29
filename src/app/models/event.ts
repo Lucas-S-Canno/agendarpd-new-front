@@ -1,5 +1,5 @@
 export interface EventModel {
-  id: number;
+  id?: number;
   titulo: string;
   sistema: string;
   horario: string;

@@ -34,8 +34,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getAllEvents();
     console.log('Dashboard initialized');
-    console.log(this.stateService.isLoggedIn);
-    console.log(this.stateService.userData);
+    console.log('Is user logged: ' + this.stateService.isLoggedIn);
+    if (this.stateService.isLoggedIn) {
+      console.log(this.stateService.userData);
+    }
   }
 
   getAllEvents(): void {
@@ -49,7 +51,6 @@ export class DashboardComponent implements OnInit {
           console.log('Simulating delay for loading spinner');
           this.loading = false;
         }, 2000);
-        console.log('Events fetched successfully');
       },
       error: (error) => {
         console.error('Error fetching events:', error);
