@@ -1,1 +1,17 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <h1>Eventos</h1>
+
+  @if (loading) {
+    <div class="loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+  @else {
+    <div class="events-grid">
+      <app-event-card
+        *ngFor="let event of events"
+        [event]="event"
+      ></app-event-card>
+    </div>
+  }
+</div>

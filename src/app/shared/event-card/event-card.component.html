@@ -1,1 +1,15 @@
-<p>event-card works!</p>
+<mat-card class="event-card" (click)="openModal()">
+  <mat-card-header>
+    <mat-card-title>{{ event.titulo }}</mat-card-title>
+    <mat-card-subtitle>{{ event.sistema }} • {{ event.horario }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ event.data | date:'dd/MM/yyyy' }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="local">{{ event.local }}</p>
+    <p class="vagas">{{ vagasDisponiveis }}</p>
+    <mat-chip-set class="tags">
+      <mat-chip *ngFor="let tag of event.tags">{{ tag }}</mat-chip>
+    </mat-chip-set>
+  </mat-card-content>
+</mat-card>

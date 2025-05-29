@@ -1,0 +1,55 @@
+<div class="event-modal">
+  <div class="modal-header">
+    <h2 mat-dialog-title>{{ event.titulo }}</h2>
+    <button mat-icon-button (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="modal-content">
+    <div class="event-details">
+      <div class="detail-item">
+        <strong>Sistema:</strong> {{ event.sistema }}
+      </div>
+
+      <div class="detail-item">
+        <strong>Data e Horário:</strong> {{ event.data }} às {{ event.horario }}
+      </div>
+
+      <div class="detail-item">
+        <strong>Local:</strong> {{ event.local }}
+      </div>
+
+      <div class="detail-item">
+        <strong>Narrador:</strong> {{ event.narrador }}
+      </div>
+
+      <div class="detail-item">
+        <strong>Vagas:</strong> {{ event.jogadores.length }}/{{ event.numeroDeVagas }}
+      </div>
+
+      <div class="detail-item" *ngIf="event.tags.length > 0">
+        <strong>Tags:</strong>
+        <mat-chip-set class="tags">
+          <mat-chip *ngFor="let tag of event.tags">{{ tag }}</mat-chip>
+        </mat-chip-set>
+      </div>
+
+      <div class="detail-item description">
+        <strong>Descrição:</strong>
+        <p>{{ event.descricao }}</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="modal-actions">
+    <button
+      mat-raised-button
+      [color]="canRegister ? 'primary' : 'warn'"
+      [disabled]="!canRegister"
+      (click)="onRegister()"
+      class="register-button">
+      {{ buttonText }}
+    </button>
+  </mat-dialog-actions>
+</div>

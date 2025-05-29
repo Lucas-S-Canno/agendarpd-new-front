@@ -9,13 +9,15 @@ import { LoginService } from '../../services/login/login.service';
 import { LoginModel } from '../../models/login';
 import { StateService } from '../../services/state/state.service';
 import { HttpClientModule } from '@angular/common/http';
+import { UserService } from '../../services/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   providers: [
     LoginService,
-    StateService
+    UserService
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private loginService: LoginService,
     private stateService: StateService,
+    private userService: UserService,
+    private router: Router
   ) {}
 
   onSubmit(): void {
@@ -58,13 +62,29 @@ export class LoginComponent {
           this.stateService.token = response.data;
         },
         complete: () => {
-          console.log('User data:', this.stateService.userData);
+          this.getUserData();
         },
         error: (error) => {
           console.error('Login failed:', error);
         }
       });
     }
+  }
+
+  getUserData() {
+    this.userService.getUserProfile().subscribe({
+      next: (response) => {
+        console.log('User data:', response.data);
+        this.stateService.userData = response.data;
+      },
+      complete: () => {
+        console.log(this.stateService.userData);
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        console.error('Failed to fetch user data:', error);
+      }
+    });
   }
 
 }
