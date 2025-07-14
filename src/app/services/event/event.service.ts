@@ -28,4 +28,10 @@ export class EventService {
     return this.http.post<ResponseModel<EventModel>>(`${this.API_URL}`, event, { headers });
   }
 
+  getMyEvents(): Observable<ResponseModel<EventModel[]>> {
+    const token = this.stateService.token;
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<ResponseModel<EventModel[]>>(`${this.API_URL}/my-events`, { headers });
+  }
+
 }

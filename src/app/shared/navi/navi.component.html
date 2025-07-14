@@ -12,7 +12,7 @@
         </a>
       } @else {
         <div mat-list-item class="welcome-item">
-          <mat-icon matListItemIcon>person</mat-icon>
+          <!-- <mat-icon matListItemIcon>person</mat-icon> -->
           <span matListItemTitle>Bem-vindo, {{ userName }}</span>
         </div>
       }
@@ -22,6 +22,14 @@
         <mat-icon matListItemIcon>dashboard</mat-icon>
         <span matListItemTitle>Home</span>
       </a>
+
+      <!-- Eventos em que me cadastrei -->
+      @if (isLoggedIn) {
+        <a mat-list-item routerLink="/meus-cadastros" (click)="onLinkClick()">
+          <mat-icon matListItemIcon>event_available</mat-icon>
+          <span matListItemTitle>Meus Cadastros</span>
+        </a>
+      }
 
       <!-- Botões para usuários NRD, CRD, ADM -->
       @if (canCreateEvents) {
