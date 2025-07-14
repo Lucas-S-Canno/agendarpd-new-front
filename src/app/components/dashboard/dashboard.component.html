@@ -5,13 +5,32 @@
     <div class="loading-spinner">
       <mat-spinner diameter="50"></mat-spinner>
     </div>
-  }
-  @else {
-    <div class="events-grid">
-      <app-event-card
-        *ngFor="let event of events"
-        [event]="event"
-      ></app-event-card>
-    </div>
+  } @else {
+    @if (eventsByDate.length === 0) {
+      <div class="no-events">
+        <p>Nenhum evento encontrado.</p>
+      </div>
+    } @else {
+      <mat-accordion class="events-accordion">
+        @for (dateGroup of eventsByDate; track dateGroup.date) {
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ dateGroup.displayDate }}
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ getEventCountText(dateGroup.events.length) }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+
+            <div class="events-grid">
+              @for (event of dateGroup.events; track event.id) {
+                <app-event-card [event]="event"></app-event-card>
+              }
+            </div>
+          </mat-expansion-panel>
+        }
+      </mat-accordion>
+    }
   }
 </div>
