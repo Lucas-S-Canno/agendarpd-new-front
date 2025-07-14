@@ -32,7 +32,12 @@
         <div class="date-time-row">
           <mat-form-field appearance="outline">
             <mat-label>Data</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="data" placeholder="Selecione a data" title="Data do evento">
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="data"
+              placeholder="dd/mm/aaaa"
+              readonly>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="eventForm.get('data')?.hasError('required')">

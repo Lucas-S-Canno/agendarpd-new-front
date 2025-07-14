@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -17,19 +17,7 @@ import { Observable, map, startWith } from 'rxjs';
 import { StateService } from '../../services/state/state.service';
 import { Router } from '@angular/router';
 import { EventService } from '../../services/event/event.service';
-import { HttpClientModule } from '@angular/common/http';
-
-export const BR_DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { BR_DATE_FORMATS } from '../../utils/utils';
 
 @Component({
   selector: 'app-new-event',
@@ -82,10 +70,12 @@ export class NewEventComponent implements OnInit {
     private fb: FormBuilder,
     private stateService: StateService,
     private router: Router,
-    private eventService: EventService
+    private eventService: EventService,
+    private dateAdapter: DateAdapter<Date>
   ) {}
 
   ngOnInit(): void {
+    this.dateAdapter.setLocale('pt-BR');  // ← Adicione esta linha
     this.initForm();
     this.setupTagsFilter();
   }
