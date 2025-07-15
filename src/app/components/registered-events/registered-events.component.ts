@@ -9,18 +9,18 @@ import { StateService } from '../../services/state/state.service';
 import { EventsByDate } from '../../models/eventsByDate';
 
 @Component({
-  selector: 'app-my-events',
+  selector: 'app-registered-events',
   standalone: true,
   imports: [
-      CommonModule,
-      EventCardComponent,
-      MatProgressSpinnerModule,
-      MatExpansionModule
-    ],
-  templateUrl: './my-events.component.html',
-  styleUrl: './my-events.component.scss'
+        CommonModule,
+        EventCardComponent,
+        MatProgressSpinnerModule,
+        MatExpansionModule
+      ],
+  templateUrl: './registered-events.component.html',
+  styleUrl: './registered-events.component.scss'
 })
-export class MyEventsComponent implements OnInit {
+export class RegisteredEventsComponent implements OnInit{
   loading: boolean = true;
   events: EventModel[] = [];
   eventsByDate: EventsByDate[] = [];
@@ -35,7 +35,7 @@ export class MyEventsComponent implements OnInit {
   }
 
   getMyEvents(): void {
-    this.eventService.getMyEvents().subscribe({
+    this.eventService.getRegisteredEvents().subscribe({
       next: (response) => {
         this.events = response.data;
         this.groupEventsByDate();

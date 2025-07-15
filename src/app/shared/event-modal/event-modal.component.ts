@@ -1,3 +1,4 @@
+import { EventService } from './../../services/event/event.service';
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -24,7 +25,8 @@ export class EventModalComponent {
   constructor(
     public dialogRef: MatDialogRef<EventModalComponent>,
     @Inject(MAT_DIALOG_DATA) public event: EventModel,
-    private stateService: StateService
+    private stateService: StateService,
+    private eventService: EventService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -32,8 +34,15 @@ export class EventModalComponent {
   }
 
   get isUserRegistered(): boolean {
-    if (!this.isLoggedIn || !this.stateService.userData?.id) return false;
-    return this.event.jogadores.includes(this.stateService.userData.id);
+    if (!this.isLoggedIn) return false;
+    if (!this.stateService.userData?.id) return false;
+    if (!this.event.jogadores || this.event.jogadores.length === 0) return false;
+    for (let i=0; i < this.event.jogadores.length; i++) {
+      if (this.event.jogadores[i] == this.stateService.userData.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   get isUserNarrator(): boolean {
@@ -61,6 +70,20 @@ export class EventModalComponent {
     if (this.canRegister) {
       // TODO: implementar lógica de cadastro no evento
       console.log('Cadastrando usuário no evento:', this.event.id);
+      let eventId = this.event.id?.toString();
+      if (!eventId) {
+        console.error('Evento ID não encontrado');
+        return;
+      }
+      this.eventService.registerInEvent(eventId).subscribe({
+        next: (response) => {
+          console.log('Usuário cadastrado com sucesso:', response);
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Erro ao cadastrar usuário no evento:', error);
+        }
+      });
     }
   }
 

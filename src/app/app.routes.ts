@@ -5,6 +5,7 @@ import { LoginComponent }     from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NewEventComponent } from './components/new-event/new-event.component';
 import { MyEventsComponent } from './components/my-events/my-events.component';
+import { RegisteredEventsComponent } from './components/registered-events/registered-events.component';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'dashboard',    pathMatch: 'full' },
@@ -12,6 +13,7 @@ export const routes: Routes = [
   { path: 'dashboard',component: DashboardComponent },
   { path: 'novo-evento', component: NewEventComponent },
   { path: 'meus-eventos', component: MyEventsComponent },
+  { path: 'eventos-registrados', component: RegisteredEventsComponent },
   { path: '**',       redirectTo: 'dashboard' }
 ];
 

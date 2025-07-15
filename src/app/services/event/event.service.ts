@@ -34,4 +34,16 @@ export class EventService {
     return this.http.get<ResponseModel<EventModel[]>>(`${this.API_URL}/my-events`, { headers });
   }
 
+  getRegisteredEvents(): Observable<ResponseModel<EventModel[]>> {
+    const token = this.stateService.token;
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.get<ResponseModel<EventModel[]>>(`${this.API_URL}/registered-events`, { headers });
+  }
+
+  registerInEvent(eventId: string): Observable<ResponseModel<EventModel>> {
+    const token = this.stateService.token;
+    const headers = { Authorization: `Bearer ${token}` };
+    return this.http.patch<ResponseModel<EventModel>>(`${this.API_URL}/${eventId}/register`, {}, { headers });
+  }
+
 }
