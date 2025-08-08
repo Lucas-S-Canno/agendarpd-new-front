@@ -1,40 +1,57 @@
-import { Component, OnInit } from '@angular/core';
-import { EventModel } from '../../models/event';
-import { EventService } from '../../services/event/event.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { EventCardComponent } from '../../shared/event-card/event-card.component';
-import { CommonModule } from '@angular/common';
-import { StateService } from '../../services/state/state.service';
+import { Subscription } from 'rxjs';
+import { EventModel } from '../../models/event';
 import { EventsByDate } from '../../models/eventsByDate';
+import { EventService } from '../../services/event/event.service';
+import { StateService } from '../../services/state/state.service';
+import { EventCardComponent } from '../../shared/event-card/event-card.component';
+import { EventUpdateService } from '../../services/event/event-update.service';
 
 @Component({
   selector: 'app-my-events',
   standalone: true,
   imports: [
-      CommonModule,
-      EventCardComponent,
-      MatProgressSpinnerModule,
-      MatExpansionModule
-    ],
+    CommonModule,
+    EventCardComponent,
+    MatProgressSpinnerModule,
+    MatExpansionModule
+  ],
   templateUrl: './my-events.component.html',
   styleUrl: './my-events.component.scss'
 })
-export class MyEventsComponent implements OnInit {
+export class MyEventsComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   events: EventModel[] = [];
   eventsByDate: EventsByDate[] = [];
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private eventService: EventService,
-    private stateService: StateService
+    private stateService: StateService,
+    private eventUpdateService: EventUpdateService
   ) {}
 
   ngOnInit(): void {
     this.getMyEvents();
+
+    // Escutar por atualizações de eventos
+    this.subscription.add(
+      this.eventUpdateService.eventUpdated$.subscribe(() => {
+        console.log('Eventos atualizados, recarregando...');
+        this.getMyEvents();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getMyEvents(): void {
+    this.loading = true;
     this.eventService.getMyEvents().subscribe({
       next: (response) => {
         this.events = response.data;
@@ -46,7 +63,7 @@ export class MyEventsComponent implements OnInit {
         }, 1000);
       },
       error: (error) => {
-        console.error('Error fetching events:', error);
+        console.error('Error fetching my events:', error);
         this.loading = false;
       }
     });
@@ -107,5 +124,4 @@ export class MyEventsComponent implements OnInit {
   getEventCountText(count: number): string {
     return count === 1 ? '1 evento' : `${count} eventos`;
   }
-
 }

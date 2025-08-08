@@ -45,9 +45,9 @@
   <mat-dialog-actions class="modal-actions">
     <button
       mat-raised-button
-      [color]="canRegister ? 'primary' : 'warn'"
-      [disabled]="!canRegister"
-      (click)="onRegister()"
+      [color]="buttonColor"
+      [disabled]="!canRegister && !canUnregister"
+      (click)="onButtonClick()"
       class="register-button">
       {{ buttonText }}
     </button>

@@ -7,6 +7,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { EventModel } from '../../models/event';
 import { StateService } from '../../services/state/state.service';
+import { EventUpdateService } from '../../services/event/event-update.service';
 
 @Component({
   selector: 'app-event-modal',
@@ -26,7 +27,8 @@ export class EventModalComponent {
     public dialogRef: MatDialogRef<EventModalComponent>,
     @Inject(MAT_DIALOG_DATA) public event: EventModel,
     private stateService: StateService,
-    private eventService: EventService
+    private eventService: EventService,
+    private eventUpdateService: EventUpdateService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -54,22 +56,30 @@ export class EventModalComponent {
     return this.isLoggedIn && !this.isUserRegistered && !this.isUserNarrator && !this.isEventFull;
   }
 
+  get canUnregister(): boolean {
+    return this.isLoggedIn && this.isUserRegistered && !this.isUserNarrator;
+  }
+
   get isEventFull(): boolean {
     return this.event.jogadores.length >= this.event.numeroDeVagas;
   }
 
   get buttonText(): string {
     if (!this.isLoggedIn) return 'Para se cadastrar nesse evento, é necessário estar logado';
-    if (this.isUserRegistered) return 'Você já está cadastrado neste evento';
-    if (this.isEventFull) return 'Evento lotado';
     if (this.isUserNarrator) return 'Você é o narrador deste evento';
+    if (this.isUserRegistered) return 'Sair do evento';
+    if (this.isEventFull) return 'Evento lotado';
     return 'Cadastrar-se no evento';
+  }
+
+  get buttonColor(): string {
+    if (this.isUserRegistered) return 'warn';
+    if (this.canRegister) return 'primary';
+    return 'warn';
   }
 
   onRegister(): void {
     if (this.canRegister) {
-      // TODO: implementar lógica de cadastro no evento
-      console.log('Cadastrando usuário no evento:', this.event.id);
       let eventId = this.event.id?.toString();
       if (!eventId) {
         console.error('Evento ID não encontrado');
@@ -78,12 +88,45 @@ export class EventModalComponent {
       this.eventService.registerInEvent(eventId).subscribe({
         next: (response) => {
           console.log('Usuário cadastrado com sucesso:', response);
+        },
+        complete: () => {
+          this.eventUpdateService.notifyEventUpdated();
           this.dialogRef.close(true);
         },
         error: (error) => {
           console.error('Erro ao cadastrar usuário no evento:', error);
         }
       });
+    }
+  }
+
+  onUnregister(): void {
+    if (this.canUnregister) {
+      let eventId = this.event.id?.toString();
+      if (!eventId) {
+        console.error('Evento ID não encontrado');
+        return;
+      }
+      this.eventService.unregisterFromEvent(eventId).subscribe({
+        next: (response) => {
+          console.log('Usuário removido com sucesso:', response);
+        },
+        complete: () => {
+          this.eventUpdateService.notifyEventUpdated();
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          console.error('Erro ao remover usuário do evento:', error);
+        }
+      });
+    }
+  }
+
+  onButtonClick(): void {
+    if (this.canRegister) {
+      this.onRegister();
+    } else if (this.canUnregister) {
+      this.onUnregister();
     }
   }
 
