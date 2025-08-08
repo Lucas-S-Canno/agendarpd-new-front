@@ -6,6 +6,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NewEventComponent } from './components/new-event/new-event.component';
 import { MyEventsComponent } from './components/my-events/my-events.component';
 import { RegisteredEventsComponent } from './components/registered-events/registered-events.component';
+import { RegisterNewUserComponent } from './components/register-new-user/register-new-user.component';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'dashboard',    pathMatch: 'full' },
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'novo-evento', component: NewEventComponent },
   { path: 'meus-eventos', component: MyEventsComponent },
   { path: 'eventos-registrados', component: RegisteredEventsComponent },
+  { path: 'cadastro', component: RegisterNewUserComponent },
   { path: '**',       redirectTo: 'dashboard' }
 ];
 

@@ -10,6 +10,12 @@
           <mat-icon matListItemIcon>login</mat-icon>
           <span matListItemTitle>Login</span>
         </a>
+
+        <!-- Botão Cadastro - só aparece se não logado -->
+        <a mat-list-item routerLink="/cadastro" (click)="onLinkClick()">
+          <mat-icon matListItemIcon>person_add</mat-icon>
+          <span matListItemTitle>Cadastrar-se</span>
+        </a>
       } @else {
         <div mat-list-item class="welcome-item">
           <!-- <mat-icon matListItemIcon>person</mat-icon> -->

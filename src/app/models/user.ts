@@ -6,5 +6,7 @@ export interface UserModel {
   dataDeNascimento: string,
   tipo: string,
   telefone: string,
-  menor: string
+  menor: string,
+  responsavel?: string,
+  telefoneResponsavel?: string
 }

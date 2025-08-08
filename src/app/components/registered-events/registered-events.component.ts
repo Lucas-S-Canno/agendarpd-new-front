@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventModel } from '../../models/event';
 import { EventService } from '../../services/event/event.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -7,6 +7,8 @@ import { EventCardComponent } from '../../shared/event-card/event-card.component
 import { CommonModule } from '@angular/common';
 import { StateService } from '../../services/state/state.service';
 import { EventsByDate } from '../../models/eventsByDate';
+import { EventUpdateService } from '../../services/event/event-update.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-registered-events',
@@ -20,21 +22,36 @@ import { EventsByDate } from '../../models/eventsByDate';
   templateUrl: './registered-events.component.html',
   styleUrl: './registered-events.component.scss'
 })
-export class RegisteredEventsComponent implements OnInit{
+export class RegisteredEventsComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   events: EventModel[] = [];
   eventsByDate: EventsByDate[] = [];
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private eventService: EventService,
-    private stateService: StateService
+    private stateService: StateService,
+    private eventUpdateService: EventUpdateService
   ) {}
 
   ngOnInit(): void {
     this.getMyEvents();
+
+    // Escutar por atualizações de eventos
+    this.subscription.add(
+      this.eventUpdateService.eventUpdated$.subscribe(() => {
+        console.log('Eventos registrados atualizados, recarregando...');
+        this.getMyEvents();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   getMyEvents(): void {
+    this.loading = true;
     this.eventService.getRegisteredEvents().subscribe({
       next: (response) => {
         this.events = response.data;

@@ -24,4 +24,12 @@ export class UserService {
       { headers }
     );
   }
+
+  // TODO: Implementar quando endpoint estiver pronto no backend
+  registerUser(userData: any): Observable<ResponseModel<UserModel>> {
+    return this.http.post<ResponseModel<UserModel>>(
+      `${this.API_URL}/register`,
+      userData
+    );
+  }
 }
