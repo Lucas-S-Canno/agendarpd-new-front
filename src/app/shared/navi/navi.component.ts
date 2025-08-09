@@ -63,12 +63,8 @@ export class NaviComponent {
   }
 
   logout(): void {
-    this.stateService.isLoggedIn = false;
-    this.stateService.token = '';
-    this.stateService.userData = {} as any;
+    this.stateService.logout();
     this.onLinkClick();
-    this.router.navigate(['/login']).then(() => {
-      window.location.reload();
-    });
+    this.router.navigate(['/login']);
   }
 }

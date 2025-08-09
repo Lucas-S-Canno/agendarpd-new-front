@@ -80,12 +80,16 @@
         <!-- Telefone -->
         <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
-          <input matInput formControlName="telefone" placeholder="(11) 99999-9999">
+          <input matInput
+                 formControlName="telefone"
+                 placeholder="(11) 99999-9999"
+                 (input)="onPhoneInput($event, 'telefone')"
+                 maxlength="15">
           <mat-icon matSuffix>phone</mat-icon>
           <mat-error *ngIf="userForm.get('telefone')?.hasError('required')">
             Telefone é obrigatório
           </mat-error>
-          <mat-error *ngIf="userForm.get('telefone')?.hasError('pattern')">
+          <mat-error *ngIf="userForm.get('telefone')?.hasError('invalidPhone')">
             Formato: (11) 99999-9999
           </mat-error>
         </mat-form-field>
@@ -111,12 +115,16 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Telefone do Responsável</mat-label>
-            <input matInput formControlName="telefoneResponsavel" placeholder="(11) 99999-9999">
+            <input matInput
+                   formControlName="telefoneResponsavel"
+                   placeholder="(11) 99999-9999"
+                   (input)="onPhoneInput($event, 'telefoneResponsavel')"
+                   maxlength="15">
             <mat-icon matSuffix>contact_phone</mat-icon>
             <mat-error *ngIf="userForm.get('telefoneResponsavel')?.hasError('required')">
               Telefone do responsável é obrigatório para menores
             </mat-error>
-            <mat-error *ngIf="userForm.get('telefoneResponsavel')?.hasError('pattern')">
+            <mat-error *ngIf="userForm.get('telefoneResponsavel')?.hasError('invalidPhone')">
               Formato: (11) 99999-9999
             </mat-error>
           </mat-form-field>

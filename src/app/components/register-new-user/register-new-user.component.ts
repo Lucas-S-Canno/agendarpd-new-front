@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
+import { PhoneMask } from '../../utils/phone-mask';
 
 // Configuração de formato de data brasileiro
 export const BR_DATE_FORMATS = {
@@ -71,6 +72,25 @@ export class RegisterNewUserComponent implements OnInit {
     this.initForm();
   }
 
+  // Validador customizado para telefone
+  phoneValidator = (control: any) => {
+    if (!control.value) return null;
+    const isValid = PhoneMask.isValid(control.value);
+    return isValid ? null : { invalidPhone: true };
+  };
+
+  // Aplica máscara no campo de telefone
+  onPhoneInput(event: any, fieldName: string): void {
+    const input = event.target;
+    const maskedValue = PhoneMask.applyMask(input.value);
+
+    // Atualiza o valor do input
+    input.value = maskedValue;
+
+    // Atualiza o FormControl
+    this.userForm.get(fieldName)?.setValue(maskedValue, { emitEvent: false });
+  }
+
   initForm(): void {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -78,9 +98,9 @@ export class RegisterNewUserComponent implements OnInit {
       nomeCompleto: ['', [Validators.required, Validators.minLength(3)]],
       dataDeNascimento: ['', Validators.required],
       tipo: ['JGD', Validators.required],
-      telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
+      telefone: ['', [Validators.required, this.phoneValidator]],
       responsavel: [''],
-      telefoneResponsavel: ['']
+      telefoneResponsavel: ['', this.phoneValidator]
     });
 
     // Observar mudanças na data de nascimento para validações condicionais
@@ -92,7 +112,7 @@ export class RegisterNewUserComponent implements OnInit {
         responsavelControl?.setValidators([Validators.required]);
         telefoneResponsavelControl?.setValidators([
           Validators.required,
-          Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)
+          this.phoneValidator
         ]);
       } else {
         responsavelControl?.clearValidators();
@@ -132,32 +152,31 @@ export class RegisterNewUserComponent implements OnInit {
         nomeCompleto: formData.nomeCompleto,
         dataDeNascimento: this.formatDate(formData.dataDeNascimento),
         tipo: formData.tipo,
-        telefone: formData.telefone,
+        telefone: PhoneMask.formatForBackend(formData.telefone), // Remove máscara
         menor: this.isMenor ? 'S' : 'N',
         responsavel: formData.responsavel || '',
-        telefoneResponsavel: formData.telefoneResponsavel || ''
+        telefoneResponsavel: PhoneMask.formatForBackend(formData.telefoneResponsavel || '') // Remove máscara
       };
 
       console.log('Dados do usuário:', userData);
 
-      // TODO: Implementar chamada para userService quando endpoint estiver pronto
-      // this.userService.registerUser(userData).subscribe({
-      //   next: (response) => {
-      //     console.log('Usuário criado com sucesso:', response);
-      //     this.router.navigate(['/login']);
-      //   },
-      //   error: (error) => {
-      //     console.error('Erro ao criar usuário:', error);
-      //     this.loading = false;
-      //   }
-      // });
+      this.userService.registerUser(userData).subscribe({
+        next: (response) => {
+          console.log('Usuário criado com sucesso:', response);
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          console.error('Erro ao criar usuário:', error);
+          this.loading = false;
+        }
+      });
 
       // Placeholder - simular sucesso após 2 segundos
-      setTimeout(() => {
-        this.loading = false;
-        alert('Usuário cadastrado com sucesso! (Simulação)');
-        this.router.navigate(['/login']);
-      }, 2000);
+      // setTimeout(() => {
+      //   this.loading = false;
+      //   alert('Usuário cadastrado com sucesso! (Simulação)');
+      //   this.router.navigate(['/login']);
+      // }, 2000);
     }
   }
 

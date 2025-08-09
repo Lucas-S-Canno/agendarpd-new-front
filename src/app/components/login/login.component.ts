@@ -52,17 +52,46 @@ export class LoginComponent {
     }
   }
 
+  // Função para decodificar JWT
+  private decodeJWT(token: string): any {
+    try {
+      const payload = token.split('.')[1];
+      const decoded = atob(payload);
+      return JSON.parse(decoded);
+    } catch (error) {
+      console.error('Erro ao decodificar token:', error);
+      return null;
+    }
+  }
+
   login() {
     if (this.loginForm.valid) {
       const credentials = this.loginForm.value;
       this.loginService.login(credentials as LoginModel).subscribe({
         next: (response) => {
           console.log('Login successful:', response);
-          this.stateService.isLoggedIn = true;
-          this.stateService.token = response.data;
-        },
-        complete: () => {
-          this.getUserData();
+
+          // Decodificar o token e extrair dados do usuário
+          const tokenData = this.decodeJWT(response.data);
+          if (tokenData) {
+            // Salvar os dados do usuário no StateService (que agora salva em cookies)
+            this.stateService.userData = {
+              id: tokenData.id,
+              email: tokenData.sub, // 'sub' é o email no seu JWT
+              nomeCompleto: tokenData.nomeCompleto,
+              tipo: tokenData.tipo,
+              password: '', // não salvar senha
+              dataDeNascimento: '',
+              telefone: '',
+              menor: ''
+            };
+
+            this.stateService.isLoggedIn = true;
+            this.stateService.token = response.data;
+
+            console.log('User data saved in cookies:', this.stateService.userData);
+            this.router.navigate(['/dashboard']);
+          }
         },
         error: (error) => {
           console.error('Login failed:', error);
@@ -71,20 +100,8 @@ export class LoginComponent {
     }
   }
 
-  getUserData() {
-    this.userService.getUserProfile().subscribe({
-      next: (response) => {
-        console.log('User data:', response.data);
-        this.stateService.userData = response.data;
-      },
-      complete: () => {
-        console.log(this.stateService.userData);
-        this.router.navigate(['/dashboard']);
-      },
-      error: (error) => {
-        console.error('Failed to fetch user data:', error);
-      }
-    });
+  goToRegister(): void {
+    this.router.navigate(['/cadastro']);
   }
 
 }

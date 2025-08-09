@@ -7,15 +7,28 @@ import { NewEventComponent } from './components/new-event/new-event.component';
 import { MyEventsComponent } from './components/my-events/my-events.component';
 import { RegisteredEventsComponent } from './components/registered-events/registered-events.component';
 import { RegisterNewUserComponent } from './components/register-new-user/register-new-user.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'dashboard',    pathMatch: 'full' },
   { path: 'login',    component: LoginComponent },
-  { path: 'dashboard',component: DashboardComponent },
-  { path: 'novo-evento', component: NewEventComponent },
-  { path: 'meus-eventos', component: MyEventsComponent },
-  { path: 'eventos-registrados', component: RegisteredEventsComponent },
   { path: 'cadastro', component: RegisterNewUserComponent },
+  { path: 'dashboard',component: DashboardComponent },
+  {
+    path: 'novo-evento',
+    component: NewEventComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'meus-eventos',
+    component: MyEventsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'eventos-registrados',
+    component: RegisteredEventsComponent,
+    canActivate: [AuthGuard]
+  },
   { path: '**',       redirectTo: 'dashboard' }
 ];
 

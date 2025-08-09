@@ -11,13 +11,14 @@ import { StateService } from '../state/state.service';
 })
 export class UserService {
   API_URL = environment.apiUrl + `/user-app/user`;
+  API_PUBLIC_URL = environment.apiUrl + `/public/user`;
   constructor(
     private http: HttpClient,
     private stateService: StateService
   ) { }
 
   getUserProfile(): Observable<ResponseModel<UserModel>> {
-    const token = this.stateService.token // ajuste conforme seu StateService
+    const token = this.stateService.token
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<ResponseModel<UserModel>>(
       `${this.API_URL}/me`,
@@ -25,10 +26,9 @@ export class UserService {
     );
   }
 
-  // TODO: Implementar quando endpoint estiver pronto no backend
-  registerUser(userData: any): Observable<ResponseModel<UserModel>> {
+  registerUser(userData: UserModel): Observable<ResponseModel<UserModel>> {
     return this.http.post<ResponseModel<UserModel>>(
-      `${this.API_URL}/register`,
+      `${this.API_PUBLIC_URL}/register`,
       userData
     );
   }
