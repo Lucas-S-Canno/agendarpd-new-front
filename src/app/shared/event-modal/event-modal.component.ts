@@ -90,7 +90,7 @@ export class EventModalComponent {
           console.log('Usuário cadastrado com sucesso:', response);
         },
         complete: () => {
-          this.eventUpdateService.notifyEventUpdated();
+          this.eventUpdateService.notifyEventUpdated(this.event.id?.toString());
           this.dialogRef.close(true);
         },
         error: (error) => {
@@ -112,7 +112,7 @@ export class EventModalComponent {
           console.log('Usuário removido com sucesso:', response);
         },
         complete: () => {
-          this.eventUpdateService.notifyEventUpdated();
+          this.eventUpdateService.notifyEventUpdated(this.event.id?.toString());
           this.dialogRef.close(true);
         },
         error: (error) => {

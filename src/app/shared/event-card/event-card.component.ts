@@ -30,10 +30,11 @@ export class EventCardComponent {
   }
 
   openModal(): void {
-    this.dialog.open(EventModalComponent, {
+    const dialogRef = this.dialog.open(EventModalComponent, {
       data: this.event,
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
+
   }
 }

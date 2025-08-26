@@ -5,11 +5,11 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class EventUpdateService {
-  private eventUpdated = new Subject<void>();
+  private eventUpdated = new Subject<string | void>();
 
   eventUpdated$ = this.eventUpdated.asObservable();
 
-  notifyEventUpdated(): void {
-    this.eventUpdated.next();
+  notifyEventUpdated(eventId?: string): void {
+    this.eventUpdated.next(eventId);
   }
 }
