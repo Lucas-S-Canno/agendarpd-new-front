@@ -8,12 +8,14 @@ import { MyEventsComponent } from './components/my-events/my-events.component';
 import { RegisteredEventsComponent } from './components/registered-events/registered-events.component';
 import { RegisterNewUserComponent } from './components/register-new-user/register-new-user.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'dashboard',    pathMatch: 'full' },
   { path: 'login',    component: LoginComponent },
   { path: 'cadastro', component: RegisterNewUserComponent },
   { path: 'dashboard',component: DashboardComponent },
+  { path: 'recuperar-senha', component: ForgotPasswordComponent },
   {
     path: 'novo-evento',
     component: NewEventComponent,

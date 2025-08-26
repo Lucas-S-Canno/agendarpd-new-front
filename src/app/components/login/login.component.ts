@@ -5,12 +5,12 @@ import { MatCardModule }          from '@angular/material/card';
 import { MatFormFieldModule }     from '@angular/material/form-field';
 import { MatInputModule }         from '@angular/material/input';
 import { MatButtonModule }        from '@angular/material/button';
+import { RouterModule, Router } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { LoginModel } from '../../models/login';
 import { StateService } from '../../services/state/state.service';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from '../../services/user/user.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +26,8 @@ import { Router } from '@angular/router';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -102,6 +103,10 @@ export class LoginComponent {
 
   goToRegister(): void {
     this.router.navigate(['/cadastro']);
+  }
+
+  goToForgotPassword(): void {
+    this.router.navigate(['/recuperar-senha']);
   }
 
 }

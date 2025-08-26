@@ -1,3 +1,8 @@
+# TO-DO
+- Nome do narrrador no modal de evento
+- Evento ao ser cadastrado ja esta vindo como se tivesse um jogador registrado
+- Quando jogador se registra a pagina não esta atualizando corretamente, causando em não mostrar as versões atualizadas dos eventos que irão acontecer
+
 # AgendarpdNewFront
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
