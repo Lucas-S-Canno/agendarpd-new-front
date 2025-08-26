@@ -1,7 +1,9 @@
 # TO-DO
 - Nome do narrrador no modal de evento
-- Evento ao ser cadastrado ja esta vindo como se tivesse um jogador registrado
-- Quando jogador se registra a pagina não esta atualizando corretamente, causando em não mostrar as versões atualizadas dos eventos que irão acontecer
+- - endpoint dos dados basicos do narrador ( id, nome e email ), http://localhost:8080/api/public/user/narrator-name/5
+- - trocar dashboard para não mostrar o nome do narrador e mostrar somente após o usuário estar logado (LGPD)
+- - talvez adicionar o campo de apelido no cadastro de usuário
+- - tratar na hora da criaçao do evento um botão switch se a pessoa quer mostrar o nome dela como narrador ou o apelido
 
 # AgendarpdNewFront
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EventModel } from '../../models/event';
 import { EventService } from '../../services/event/event.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -7,6 +7,8 @@ import { EventCardComponent } from '../../shared/event-card/event-card.component
 import { CommonModule } from '@angular/common';
 import { StateService } from '../../services/state/state.service';
 import { EventsByDate } from '../../models/eventsByDate';
+import { EventUpdateService } from '../../services/event/event-update.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,18 +22,49 @@ import { EventsByDate } from '../../models/eventsByDate';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   events: EventModel[] = [];
   eventsByDate: EventsByDate[] = [];
+  private eventUpdateSubscription: Subscription = new Subscription();
 
   constructor(
     private eventService: EventService,
-    private stateService: StateService
+    private stateService: StateService,
+    private eventUpdateService: EventUpdateService
   ) {}
 
   ngOnInit(): void {
     this.getAllEvents();
+    this.subscribeToEventUpdates();
+  }
+
+  ngOnDestroy(): void {
+    this.eventUpdateSubscription.unsubscribe();
+  }
+
+  subscribeToEventUpdates(): void {
+    this.eventUpdateSubscription = this.eventUpdateService.eventUpdated$.subscribe((eventId) => {
+      console.log('Event updated, refreshing dashboard...', eventId ? `Event ID: ${eventId}` : 'All events');
+      this.refreshEvents();
+    });
+  }
+
+  refreshEvents(): void {
+    // Não mostrar loading durante refresh para melhor UX
+    this.getAllEventsWithoutLoading();
+  }
+
+  getAllEventsWithoutLoading(): void {
+    this.eventService.getAllEvents().subscribe({
+      next: (response) => {
+        this.events = response.data;
+        this.groupEventsByDate();
+      },
+      error: (error) => {
+        console.error('Error fetching events:', error);
+      }
+    });
   }
 
   getAllEvents(): void {
@@ -41,9 +74,7 @@ export class DashboardComponent implements OnInit {
         this.groupEventsByDate();
       },
       complete: () => {
-        setTimeout(() => {
-          this.loading = false;
-        }, 1000);
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error fetching events:', error);
