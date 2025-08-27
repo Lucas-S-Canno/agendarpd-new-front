@@ -80,6 +80,7 @@ export class LoginComponent {
               id: tokenData.id,
               email: tokenData.sub, // 'sub' é o email no seu JWT
               nomeCompleto: tokenData.nomeCompleto,
+              apelido: tokenData.apelido || '', // adicionar apelido do token ou string vazia
               tipo: tokenData.tipo,
               password: '', // não salvar senha
               dataDeNascimento: '',

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ResponseModel } from '../../models/response';
 import { UserModel } from '../../models/user';
 import { StateService } from '../state/state.service';
+import { NarratorNicknameModel } from '../../models/narratorNickname';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,15 @@ export class UserService {
     return this.http.post<ResponseModel<UserModel>>(
       `${this.API_PUBLIC_URL}/register`,
       userData
+    );
+  }
+
+  getNarratorName(id: number): Observable<ResponseModel<NarratorNicknameModel>> {
+    const token = this.stateService.token
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<ResponseModel<NarratorNicknameModel>>(
+      `${this.API_URL}/narrator-name/${id}`,
+      { headers }
     );
   }
 }

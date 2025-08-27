@@ -52,6 +52,19 @@
           </mat-error>
         </mat-form-field>
 
+        <!-- Apelido -->
+        <mat-form-field appearance="outline">
+          <mat-label>Apelido</mat-label>
+          <input matInput formControlName="apelido" placeholder="Como gostaria de ser chamado">
+          <mat-icon matSuffix>badge</mat-icon>
+          <mat-error *ngIf="userForm.get('apelido')?.hasError('required')">
+            Apelido é obrigatório
+          </mat-error>
+          <mat-error *ngIf="userForm.get('apelido')?.hasError('minlength')">
+            Apelido deve ter pelo menos 2 caracteres
+          </mat-error>
+        </mat-form-field>
+
         <!-- Data de Nascimento e Tipo -->
         <div class="date-type-row">
           <mat-form-field appearance="outline">

@@ -20,8 +20,8 @@
         <strong>Local:</strong> {{ event.local }}
       </div>
 
-      <div class="detail-item">
-        <strong>Narrador:</strong> {{ event.narrador }}
+      <div class="detail-item" *ngIf="isLoggedIn">
+        <strong>Narrador:</strong> {{ narratorNickname || 'Carregando...' }}
       </div>
 
       <div class="detail-item">

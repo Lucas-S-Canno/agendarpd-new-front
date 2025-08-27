@@ -1,9 +1,17 @@
 # TO-DO
 - Nome do narrrador no modal de evento
-- - endpoint dos dados basicos do narrador ( id, nome e email ), http://localhost:8080/api/public/user/narrator-name/5
-- - trocar dashboard para não mostrar o nome do narrador e mostrar somente após o usuário estar logado (LGPD)
-- - talvez adicionar o campo de apelido no cadastro de usuário
-- - tratar na hora da criaçao do evento um botão switch se a pessoa quer mostrar o nome dela como narrador ou o apelido
+[x] endpoint dos dados basicos do narrador ( id, nome e email ), http://localhost:8080/api/user-app/user/narrator-name/{id}
+[x] trocar dashboard para não mostrar o nome do narrador e mostrar somente após o usuário estar logado (LGPD)
+[x] talvez adicionar o campo de apelido no cadastro de usuário
+[] tratar na hora da criaçao do evento um botão switch se a pessoa quer mostrar o nome dela como narrador ou o apelido
+
+- Alterar formato da data no modal de evento esta yyyy-mm-dd, alterar para dd/mm/yyyy
+
+- Criar pagina de perfil do usuário
+  [] Criar componente
+  [] liberar editar alguns campos (validar quais poderão ser alterados)
+
+- Criar modal para aceitação do uso de Cookies (talvez precise de algo no backend)
 
 # AgendarpdNewFront
 

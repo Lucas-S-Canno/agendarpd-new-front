@@ -96,6 +96,7 @@ export class RegisterNewUserComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       nomeCompleto: ['', [Validators.required, Validators.minLength(3)]],
+      apelido: ['', [Validators.required, Validators.minLength(2)]],
       dataDeNascimento: ['', Validators.required],
       tipo: ['JGD', Validators.required],
       telefone: ['', [Validators.required, this.phoneValidator]],
@@ -150,6 +151,7 @@ export class RegisterNewUserComponent implements OnInit {
         email: formData.email,
         password: formData.password,
         nomeCompleto: formData.nomeCompleto,
+        apelido: formData.apelido,
         dataDeNascimento: this.formatDate(formData.dataDeNascimento),
         tipo: formData.tipo,
         telefone: PhoneMask.formatForBackend(formData.telefone), // Remove máscara

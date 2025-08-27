@@ -1,5 +1,5 @@
 import { EventService } from './../../services/event/event.service';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { EventModel } from '../../models/event';
 import { StateService } from '../../services/state/state.service';
 import { EventUpdateService } from '../../services/event/event-update.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-event-modal',
@@ -22,14 +23,38 @@ import { EventUpdateService } from '../../services/event/event-update.service';
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.scss']
 })
-export class EventModalComponent {
+export class EventModalComponent implements OnInit {
+  narratorNickname: string = '';
+
   constructor(
-    public dialogRef: MatDialogRef<EventModalComponent>,
     @Inject(MAT_DIALOG_DATA) public event: EventModel,
+    public dialogRef: MatDialogRef<EventModalComponent>,
     private stateService: StateService,
     private eventService: EventService,
-    private eventUpdateService: EventUpdateService
+    private eventUpdateService: EventUpdateService,
+    private userService: UserService
   ) {}
+
+  ngOnInit(): void {
+    if (this.isLoggedIn && this.event.narrador) {
+      this.loadNarratorNickname();
+    }
+  }
+
+  private loadNarratorNickname(): void {
+    const narratorId = parseInt(this.event.narrador);
+    this.userService.getNarratorName(narratorId).subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.narratorNickname = response.data.apelido;
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao buscar apelido do narrador:', error);
+        this.narratorNickname = 'Narrador';
+      }
+    });
+  }
 
   get isLoggedIn(): boolean {
     return this.stateService.isLoggedIn;
